@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "niceml-dashboard"
+version = "0.1.0"
+description = ""
+authors = ["Nils Uhrberg <nils.uhrberg@codecentric.de>","Jan-Lukas Richert <janlukas.richert@gmail.com>", "Ihsan Kisi <ihsan.kisi@codecentric.de>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^3.7.0"
+
+[tool.ruff]
+select = ["E","F","D100", "D101","D102", "D103","D105","D106","D107","PT","PL"]
+fixable = ["E","F","D","PT","PL"]
+exclude = ["./tests/**"]
+line-length = 100
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
