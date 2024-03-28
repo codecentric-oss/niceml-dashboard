@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "niceml-dashboard"
+name = "nicemldashboard"
 version = "0.1.0"
 description = ""
 authors = ["Nils Uhrberg <nils.uhrberg@codecentric.de>","Jan-Lukas Richert <janlukas.richert@gmail.com>", "Ihsan Kisi <ihsan.kisi@codecentric.de>"]
