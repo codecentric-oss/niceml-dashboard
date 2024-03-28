@@ -34,12 +34,14 @@ major_on_zero = true
 allow_zero_version = true
 tag_format = "v{version}"
 version_variables = [
-    "semantic_release/__init__.py:__version__",
-    "docs/conf.py:version",
+    "nicemldashboard/__init__.py:__version__",
+]
+version_toml = [
+    "pyproject.toml:tool.poetry.version",
 ]
 
 [tool.semantic_release.branches.main]
-match = "(main|develop)"
+match = "main"
 prerelease_token = "rc"
 prerelease = false
 
