@@ -1,2 +1,2 @@
 # niceml-dashboard
- - Welcome on board.
+ - Welcome on board
