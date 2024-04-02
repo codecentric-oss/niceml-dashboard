@@ -9,7 +9,10 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-
+nicegui = "^1.4.17"
+pandas = "^2.2.1"
+numpy = "^1.26.4"
+plotly = "^5.19.0"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.7.0"
