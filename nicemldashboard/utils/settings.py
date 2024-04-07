@@ -63,14 +63,17 @@ class Settings:
 
             self.theme: Theme = self._get_theme()
 
-    def _get_theme(self):
+    def _get_theme(self) -> Theme:
         """
         Get the theme settings from the loaded settings dictionary.
 
         Returns:
             Theme: The theme settings.
         """
-        theme_settings = self.settings_dict.get("theme", {})
+        if self.settings_dict is not None:
+            theme_settings = self.settings_dict.get("theme", {})
+        else:
+            theme_settings = {}
         return Theme(
             primary=theme_settings.get("primary", "#22F4AE"),
             primary_variant=theme_settings.get("primary_variant", "#1bc38b"),
