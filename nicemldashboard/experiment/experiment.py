@@ -79,11 +79,11 @@ class Experiment:
         Returns:
             A list of dictionaries representing the columns of the table.
         """
-        rows = []
+        columns = []
         for attribute in inspect.get_annotations(cls.__init__).keys():
             if attribute in ["experiment_type"]:
                 continue
-            rows.append(
+            columns.append(
                 {
                     "name": attribute,
                     "label": format_string(attribute),
@@ -93,7 +93,7 @@ class Experiment:
                 }
             )
 
-        return rows
+        return columns
 
 
 def format_string(input_string: str):

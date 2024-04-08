@@ -10,14 +10,14 @@ Attributes:
 
 """
 
-from typing import Optional
+from typing import Optional, List
 
 from nicegui import ui
 from nicemldashboard.basecomponents.buttons import SidebarToggleButton
 from nicemldashboard.experiment.type import ExperimentType
 
 
-def sidebar(experiment_types: Optional[list[ExperimentType]] = None):
+def sidebar(experiment_types: Optional[List[ExperimentType]] = None):
     """
     Create a sidebar for the dashboard.
 
