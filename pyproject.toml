@@ -14,6 +14,7 @@ pyaml = "^23.12.0"
 numpy = "^1.26.4"
 
 
+
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.7.0"
 python-semantic-release = "^9.3.1"
@@ -26,6 +27,7 @@ select = ["E","F","D100", "D101","D102", "D103","D105","D106","D107","PT","PL"]
 fixable = ["E","F","D","PT","PL"]
 exclude = ["./tests/**"]
 line-length = 100
+
 
 [tool.ruff.pylint]
 max-args = 10
