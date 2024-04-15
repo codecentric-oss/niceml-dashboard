@@ -9,20 +9,28 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-nicegui = "^1.4.17"
-pandas = "^2.2.1"
+nicegui = "^1.4.19"
+pyaml = "^23.12.0"
 numpy = "^1.26.4"
-plotly = "^5.19.0"
+
+
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.7.0"
 python-semantic-release = "^9.3.1"
+black = "^24.3.0"
+pytest = "^8.1.1"
+
 
 [tool.ruff]
 select = ["E","F","D100", "D101","D102", "D103","D105","D106","D107","PT","PL"]
 fixable = ["E","F","D","PT","PL"]
 exclude = ["./tests/**"]
 line-length = 100
+
+
+[tool.ruff.pylint]
+max-args = 10
 
 [build-system]
 requires = ["poetry-core"]

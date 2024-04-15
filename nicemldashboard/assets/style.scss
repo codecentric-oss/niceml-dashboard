@@ -1,0 +1,139 @@
+// Import and define regular font
+@font-face {
+  font-family: 'Rubik';
+  src: url('./fonts/rubik/Rubik-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Rubik';
+  src: url('./fonts/rubik/Rubik-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Rubik';
+  src: url('./fonts/rubik/Rubik-BlackItalic.ttf') format('truetype');
+  font-weight: 900;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Rubik';
+  src: url('./fonts/rubik/Rubik-BoldItalic.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Rubik';
+  src: url('./fonts/rubik/Rubik-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Rubik';
+  src: url('./fonts/rubik/Rubik-ExtraBoldItalic.ttf') format('truetype');
+  font-weight: 800;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Rubik';
+  src: url('./fonts/rubik/Rubik-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Rubik';
+  src: url('./fonts/rubik/Rubik-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Rubik';
+  src: url('./fonts/rubik/Rubik-LightItalic.ttf') format('truetype');
+  font-weight: 300;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Rubik';
+  src: url('./fonts/rubik/Rubik-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Rubik';
+  src: url('./fonts/rubik/Rubik-MediumItalic.ttf') format('truetype');
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Rubik';
+  src: url('./fonts/rubik/Rubik-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style:normal;
+}
+
+@font-face {
+  font-family: 'Rubik';
+  src: url('./fonts/rubik/Rubik-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Rubik';
+  src: url('./fonts/rubik/Rubik-SemiBoldItalic.ttf') format('truetype');
+  font-weight: 600;
+  font-style: italic;
+}
+$primary: #22F4AE !default
+
+
+// Define font family variable
+$font-family: 'Rubik', Helvetica, sans-serif;
+
+// Apply font family to elements
+body {
+  font-family: $font-family; // Use the custom font family
+}
+
+.sidebar{
+  background-color: #f1f1f1;
+  display: flex;
+  align-items: center;
+  padding: 5px 5px;
+  button{
+    width:100%
+  }
+  button.sidebar-toggle{
+    align-self: end;
+    width: auto;
+    span{
+      color: #a1a1a1;
+    }
+    span:hover{
+            color: #22F4AE;
+
+    }
+  }
+  button.exp-type-btn{
+    width: 100%;
+    color: #a1a1a1;
+    span.block{
+      font-size: 1rem;
+      font-weight: 400;
+    }
+
+  }
+  button.exp-type-btn:hover{
+    color: #22F4AE;
+  }
+}
+
+.content{
+  display: flex;
+  padding: 3em 5%;
+  width: 100%;
+}
