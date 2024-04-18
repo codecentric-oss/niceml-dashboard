@@ -15,6 +15,9 @@ from nicegui import ui
 from nicemldashboard.basecomponents.sidebar import sidebar
 from nicemldashboard.basecomponents.table import experiment_runs_table
 from nicemldashboard.experiment.utils import get_random_experiments
+from nicemldashboard.experiment.experiment_manager import ExperimentManager
+from nicemldashboard.experiment.type import ExperimentType
+from nicemldashboard.experiment.experiment import Experiment
 
 
 @ui.page("/")
@@ -25,7 +28,9 @@ def home():
     ui.add_style("nicemldashboard/assets/style.scss")
 
     experiments = get_random_experiments(experiment_count=20)
+    experiment_manager = ExperimentManager(experiments)
 
+    experiments = experiment_manager.filter_by(experiment_type=ExperimentType.OBJ_DET)
     sidebar()
     with ui.grid().classes("content"):
         with ui.card().style("width:100%"):
