@@ -58,7 +58,7 @@ jobs:
         run: |
           if [[ "${{matrix.os}}" == "windows-latest" ]]
           then
-            type results\test-results-${{ matrix.python-version }}-${{matrix.os}}-summary.md >> $GITHUB_STEP_SUMMARY
+            echo "No summary available for Windows runners" >> $GITHUB_STEP_SUMMARY
           else
             cat test-results-${{ matrix.python-version }}-${{matrix.os}}-summary.md >> $GITHUB_STEP_SUMMARY
           fi
