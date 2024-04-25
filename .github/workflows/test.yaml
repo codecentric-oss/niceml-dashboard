@@ -1,0 +1,58 @@
+name: 🧪 tests
+
+on:
+  pull_request:
+    types: [ opened, reopened, synchronize ]
+  workflow_call:
+jobs:
+  test:
+    strategy:
+      fail-fast: true
+      matrix:
+        python-version: [ "3.9", "3.10", "3.11"]
+        os: [ ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    name: 🧪 Run pytests
+    steps:
+      - name: ⬇️ Checkout repository
+        uses: actions/checkout@v4
+      - name: 🐍Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: 🔨 Setup poetry
+        uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: "1.7.1"
+      - name: 🧙 Install dependencies
+        run: |
+          poetry config virtualenvs.create true --local
+          poetry install --no-interaction --with dev --no-ansi
+      - run: mkdir results && touch results/test-results-${{ matrix.python-version }}-${{matrix.os}}-summary.md
+      - name: 🧪 Run tests
+        uses: aiakide/pytest-summary@main
+        with:
+          extensions: pytest-cov
+          options: --doctest-modules --cov-report term --cov-report html:results/coverage-${{ matrix.python-version }}-${{matrix.os}} --cov=nicemldashboard
+          paths: tests/**
+          output: results/test-results-${{ matrix.python-version }}-${{matrix.os}}-summary.md
+          show: "fail, skip"
+      - name: ⬆️ Upload pytest results
+        uses: actions/upload-artifact@v3
+        env:
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          name: pytest-results-${{ matrix.python-version }}-${{matrix.os}}
+          path: |
+            results
+            .test_report.xml
+        # Use always() to always run this step to publish test results when there are test failures
+        if: ${{ always() }}
+      - name: 🖊️ Write job summary
+        run: |
+          echo "# 🧪 Test summary for python ${{ matrix.python-version }}-${{matrix.os}}" >> $GITHUB_STEP_SUMMARY
+          echo "$(results/test-results-${{ matrix.python-version }}-${{matrix.os}}-summary.md)" >> $GITHUB_STEP_SUMMARY
+          echo "$(results/coverage-${{ matrix.python-version }}-${{matrix.os}}/index.html)" >> $GITHUB_STEP_SUMMARY
+        shell: bash
+        if: ${{ always() }}
