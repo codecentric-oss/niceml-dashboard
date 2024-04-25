@@ -4,6 +4,7 @@ on:
   pull_request:
     types: [ opened, reopened, synchronize ]
   workflow_call:
+  push:
 jobs:
   test:
     strategy:
@@ -38,21 +39,26 @@ jobs:
           paths: tests/**
           output: results/test-results-${{ matrix.python-version }}-${{matrix.os}}-summary.md
           show: "fail, skip"
-      - name: ⬆️ Upload pytest results
-        uses: actions/upload-artifact@v3
-        env:
-         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          name: pytest-results-${{ matrix.python-version }}-${{matrix.os}}
-          path: |
-            results
-            .test_report.xml
-        # Use always() to always run this step to publish test results when there are test failures
-        if: ${{ always() }}
+#      - name: ⬆️ Upload pytest results
+#        uses: actions/upload-artifact@v3
+#        env:
+#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          name: pytest-results-${{ matrix.python-version }}-${{matrix.os}}
+#          path: |
+#            results
+#            .test_report.xml
+#        # Use always() to always run this step to publish test results when there are test failures
+#        if: ${{ always() }}
       - name: 🖊️ Write job summary
         run: |
-          echo "# 🧪 Test summary for python ${{ matrix.python-version }}-${{matrix.os}}" >> $GITHUB_STEP_SUMMARY
-          echo "$(results/test-results-${{ matrix.python-version }}-${{matrix.os}}-summary.md)" >> $GITHUB_STEP_SUMMARY
-          echo "$(results/coverage-${{ matrix.python-version }}-${{matrix.os}}/index.html)" >> $GITHUB_STEP_SUMMARY
+          if [[ "${{matrix.os}}" == "windows-latest" ]]
+          then
+            type results/test-results-${{ matrix.python-version }}-${{matrix.os}}-summary.md >> $GITHUB_STEP_SUMMARY
+            type results/coverage-${{ matrix.python-version }}-${{matrix.os}}/index.html >> $GITHUB_STEP_SUMMARY
+          else
+            cat results/test-results-${{ matrix.python-version }}-${{matrix.os}}-summary.md >> $GITHUB_STEP_SUMMARY
+            cat results/coverage-${{ matrix.python-version }}-${{matrix.os}}/index.html >> $GITHUB_STEP_SUMMARY
+          fi
         shell: bash
         if: ${{ always() }}
