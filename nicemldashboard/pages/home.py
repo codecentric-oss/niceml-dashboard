@@ -17,7 +17,6 @@ from nicemldashboard.basecomponents.table import experiment_runs_table
 from nicemldashboard.experiment.utils import get_random_experiments
 from nicemldashboard.experiment.experiment_manager import ExperimentManager
 from nicemldashboard.experiment.type import ExperimentType
-from nicemldashboard.experiment.experiment import Experiment
 
 
 @ui.page("/")
