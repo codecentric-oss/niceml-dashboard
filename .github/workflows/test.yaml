@@ -38,37 +38,38 @@ jobs:
         uses: aiakide/pytest-summary@main
         with:
           extensions: pytest-cov
-          options: --doctest-modules --cov-report term --cov-report xml:results/coverage-${{ matrix.python-version }}-${{matrix.os}}.xml --cov=nicemldashboard
+          options: --doctest-modules --cov-report term --cov-report xml:coverage-${{ matrix.python-version }}-${{matrix.os}}.xml --cov=nicemldashboard
           paths: tests/**
-          output: results/test-results-${{ matrix.python-version }}-${{matrix.os}}-summary.md
+          output: test-results-${{ matrix.python-version }}-${{matrix.os}}-summary.md
           show: "fail, skip"
-#      - name: ⬆️ Upload pytest results
-#        uses: actions/upload-artifact@v3
-#        env:
-#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        with:
-#          name: pytest-results-${{ matrix.python-version }}-${{matrix.os}}
-#          path: |
-#            results
-#            .test_report.xml
-#        # Use always() to always run this step to publish test results when there are test failures
-#        if: ${{ always() }}
+      - name: ⬆️ Upload pytest results
+        uses: actions/upload-artifact@v3
+        env:
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          name: pytest-results-${{ matrix.python-version }}-${{matrix.os}}
+          path: |
+            coverage-${{ matrix.python-version }}-${{matrix.os}}.xml
+            test-results-${{ matrix.python-version }}-${{matrix.os}}-summary.md
+            .test_report.xml
+        # Use always() to always run this step to publish test results when there are test failures
+        if: ${{ always() }}
       - name: 🖊️ Write job summary
         run: |
           if [[ "${{matrix.os}}" == "windows-latest" ]]
           then
-            type ./results/test-results-${{ matrix.python-version }}-${{matrix.os}}-summary.md >> $GITHUB_STEP_SUMMARY
+            type test-results-${{ matrix.python-version }}-${{matrix.os}}-summary.md >> $GITHUB_STEP_SUMMARY
           else
-            cat results/test-results-${{ matrix.python-version }}-${{matrix.os}}-summary.md >> $GITHUB_STEP_SUMMARY
+            cat test-results-${{ matrix.python-version }}-${{matrix.os}}-summary.md >> $GITHUB_STEP_SUMMARY
           fi
         shell: bash
         if: ${{ always() }}
       - name: ✏️ Write test result as comment
         uses: MishaKav/pytest-coverage-comment@v1.1.51
         with:
-          pytest-xml-coverage-path: ./results/coverage-${{ matrix.python-version }}-${{matrix.os}}.xml
-          title: My Coverage Report Title
-          badge-title: My Badge Coverage Title
+          pytest-xml-coverage-path: coverage-${{ matrix.python-version }}-${{matrix.os}}.xml
+          title: Coverage Report
+          badge-title: Code Coverage
           hide-badge: false
           hide-report: false
           create-new-comment: false
@@ -76,5 +77,5 @@ jobs:
           report-only-changed-files: false
           remove-link-from-badge: false
           junitxml-path: .test_report.xml
-          junitxml-title: My JUnit Xml Summary Title
+          junitxml-title: Pytest summary
           github-token: ${{ secrets.GITHUB_TOKEN }}
