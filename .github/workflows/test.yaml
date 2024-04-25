@@ -27,7 +27,7 @@ jobs:
           poetry-version: "1.7.1"
       - name: 🧙 Install dependencies
         run: |
-          poetry config virtualenvs.create true --local
+          poetry config virtualenvs.create false
           poetry install --no-interaction --with dev --no-ansi
       - run: mkdir results && touch results/test-results-${{ matrix.python-version }}-${{matrix.os}}-summary.md
       - name: 🧪 Run tests
