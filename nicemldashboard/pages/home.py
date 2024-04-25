@@ -22,7 +22,7 @@ def home():
     """
     Define the layout of the home page.
     """
-    ui.add_style("nicemldashboard/assets/style.scss")
+    ui.add_scss("nicemldashboard/assets/style.scss")
 
     experiments = get_random_experiments(experiment_count=20)
 
