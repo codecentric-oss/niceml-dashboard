@@ -74,7 +74,7 @@ jobs:
           hide-report: false
           create-new-comment: false
           hide-comment: false
-          report-only-changed-files: false
+          report-only-changed-files: true
           remove-link-from-badge: false
           junitxml-path: .test_report.xml
           junitxml-title: Pytest summary
