@@ -11,8 +11,7 @@ Attributes:
     * `Experiment`: A class to represent an experiment for a NiceML Dashboard.
 """
 
-import inspect
-from typing import Dict
+from typing import Dict, get_type_hints
 
 from nicemldashboard.experiment.type import ExperimentType
 
@@ -68,7 +67,12 @@ class Experiment:
         """
         row = {}
         for attribute in vars(self):
-            row[attribute] = getattr(self, attribute)
+            value = getattr(self, attribute)
+            if isinstance(value, dict):
+                value = ", ".join(
+                    [f"{name}:{version}" for name, version in value.items()]
+                )
+            row[attribute] = value
         return row
 
     @classmethod
@@ -80,7 +84,7 @@ class Experiment:
             A list of dictionaries representing the columns of the table.
         """
         columns = []
-        for attribute in inspect.get_annotations(cls.__init__).keys():
+        for attribute in get_type_hints(cls.__init__).keys():
             if attribute in ["experiment_type"]:
                 continue
             columns.append(
