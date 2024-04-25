@@ -1,5 +1,6 @@
 """
-
+This module provides an experiment manager. Currently, experiment manager supports filtering experiments
+by their properties.
 """
 import logging
 from typing import List
