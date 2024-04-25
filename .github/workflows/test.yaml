@@ -35,7 +35,7 @@ jobs:
         uses: aiakide/pytest-summary@main
         with:
           extensions: pytest-cov
-          options: --doctest-modules --cov-report term --cov-report html:results/coverage-${{ matrix.python-version }}-${{matrix.os}} --cov=nicemldashboard
+          options: --doctest-modules --cov-report term --cov-report xml:results/coverage-${{ matrix.python-version }}-${{matrix.os}}.xml --cov=nicemldashboard
           paths: tests/**
           output: results/test-results-${{ matrix.python-version }}-${{matrix.os}}-summary.md
           show: "fail, skip"
@@ -54,11 +54,24 @@ jobs:
         run: |
           if [[ "${{matrix.os}}" == "windows-latest" ]]
           then
-            type results/test-results-${{ matrix.python-version }}-${{matrix.os}}-summary.md >> $GITHUB_STEP_SUMMARY
-            type results/coverage-${{ matrix.python-version }}-${{matrix.os}}/index.html >> $GITHUB_STEP_SUMMARY
+            type ./results/test-results-${{ matrix.python-version }}-${{matrix.os}}-summary.md >> $GITHUB_STEP_SUMMARY
           else
             cat results/test-results-${{ matrix.python-version }}-${{matrix.os}}-summary.md >> $GITHUB_STEP_SUMMARY
-            cat results/coverage-${{ matrix.python-version }}-${{matrix.os}}/index.html >> $GITHUB_STEP_SUMMARY
           fi
         shell: bash
         if: ${{ always() }}
+      - name: ✏️ Write test result as comment
+        uses: MishaKav/pytest-coverage-comment@v1.1.51
+        with:
+          pytest-xml-coverage-path: ./results/coverage-${{ matrix.python-version }}-${{matrix.os}}.xml
+          title: My Coverage Report Title
+          badge-title: My Badge Coverage Title
+          hide-badge: false
+          hide-report: false
+          create-new-comment: false
+          hide-comment: false
+          report-only-changed-files: false
+          remove-link-from-badge: false
+          junitxml-path: .test_report.xml
+          junitxml-title: My JUnit Xml Summary Title
+          github-token: ${{ secrets.GITHUB_TOKEN }}
