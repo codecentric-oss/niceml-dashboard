@@ -10,13 +10,15 @@ Attributes:
 
 """
 
-from nicegui import ui
 
+from nicegui import ui
+from nicegui.observables import ObservableDict
+
+from nicemldashboard.State.State import EventManager, Dicts, Events, init_event_manager
 from nicemldashboard.basecomponents.sidebar import sidebar
 from nicemldashboard.basecomponents.table import experiment_runs_table
 from nicemldashboard.experiment.utils import get_random_experiments
 from nicemldashboard.experiment.experiment_manager import ExperimentManager
-from nicemldashboard.experiment.type import ExperimentType
 
 
 @ui.page("/")
@@ -25,11 +27,15 @@ def home():
     Define the layout of the home page.
     """
     ui.add_style("nicemldashboard/assets/style.scss")
+    # Initialize the state_manager
+    _instance = EventManager()
+    init_event_manager(_instance)
+    exp_dict = _instance.get_dict(Dicts.experiment_dict)
+    exp_dict.on_change(_experiment_runs_table.refresh)
 
     experiments = get_random_experiments(experiment_count=20)
     experiment_manager = ExperimentManager(experiments)
 
-    experiments = experiment_manager.filter_by(experiment_type=ExperimentType.OBJ_DET)
     sidebar()
     with ui.grid().classes("content"):
         with ui.card().style("width:100%"):
@@ -37,4 +43,14 @@ def home():
                 with ui.row():
                     ui.input(label="Experiment run", placeholder="Search for run")
                 ui.separator()
-                experiment_runs_table(experiments=experiments)
+                _experiment_runs_table(experiment_manager, exp_dict)
+
+
+@ui.refreshable
+def _experiment_runs_table(
+    experiment_manager: ExperimentManager, exp_dic: ObservableDict
+):
+    experiments = experiment_manager.filter_by(
+        experiment_type=exp_dic.get(Events.on_experiment_change)
+    )
+    experiment_runs_table(experiments=experiments)

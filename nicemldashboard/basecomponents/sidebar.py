@@ -13,6 +13,10 @@ Attributes:
 from typing import Optional, List
 
 from nicegui import ui
+from nicegui.observables import ObservableDict
+
+
+from nicemldashboard.State.State import _get_event_manager, Dicts, Events
 from nicemldashboard.basecomponents.buttons import SidebarToggleButton
 from nicemldashboard.experiment.type import ExperimentType
 
@@ -36,14 +40,43 @@ def sidebar(experiment_types: Optional[List[ExperimentType]] = None):
         side_bar_toggle = SidebarToggleButton(left_drawer=left_drawer)
 
         for experiment_type in experiment_types:
+            button_callback = lambda e, et=experiment_type: (
+                on_stage_change(
+                    _get_event_manager().get_dict(Dicts.experiment_dict), get_enum(et)
+                )
+            )
+
             with ui.button(
-                color="transparent",
-                icon=experiment_type.icon,
-            ).props(
-                "flat"
-            ).classes("exp-type-btn").bind_text_from(
+                color="transparent", icon=experiment_type.icon, on_click=button_callback
+            ).props("flat").classes("exp-type-btn").bind_text_from(
                 experiment_type,
                 "prefix",
                 backward=lambda x: ("" if not side_bar_toggle.is_expanded() else x),
             ):
                 ui.tooltip(experiment_type.name)
+
+
+def on_stage_change(observable_dict: ObservableDict, value: str):
+    """
+    Updates the Events.on_experiment_change key with the value given.
+    :param observable_dict:
+    :param value:
+    :return:
+    """
+    observable_dict[Events.on_experiment_change] = value
+
+
+def get_enum(experiment_type: ExperimentType):
+    """
+    Provides a way to easily compare the experiment type with the ExperimentType Enums
+    :param experiment_type:
+    :return:
+    """
+    if experiment_type.prefix == "SEG":
+        return ExperimentType.SEM_SEG
+    elif experiment_type.prefix == "CLS":
+        return ExperimentType.CLS
+    elif experiment_type.prefix == "OBD":
+        return ExperimentType.OBJ_DET
+    else:
+        raise Exception("The event type is not available in the ExperimentType Enum")

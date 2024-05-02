@@ -77,6 +77,14 @@ def init_event_manager(event_manager: EventManager):
         logger.debug("Event Manager cannot be initialized in a background task")
 
 
+class Events(Enum):
+    """
+    Manages the events in the observable dictionaries
+    """
+
+    on_experiment_change = "on_experiment_change"
+
+
 class Dicts(Enum):
     """
     Manages the observable dictionaries
