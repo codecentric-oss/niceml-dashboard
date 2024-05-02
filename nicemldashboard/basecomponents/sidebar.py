@@ -15,7 +15,6 @@ from typing import Optional, List
 from nicegui import ui
 from nicegui.observables import ObservableDict
 
-
 from nicemldashboard.State.State import _get_event_manager, ExperimentStateKeys, ExperimentEvents
 from nicemldashboard.basecomponents.buttons import SidebarToggleButton
 from nicemldashboard.experiment.type import ExperimentType
@@ -65,7 +64,6 @@ def on_stage_change(observable_dict: ObservableDict, value: str):
     :return:
     """
     observable_dict[ExperimentEvents.ON_EXPERIMENT_PREFIX_CHANGE] = value
-
 
 def get_enum(experiment_type: ExperimentType):
     """

@@ -83,7 +83,6 @@ def init_event_manager(event_manager: EventManager):
     except RuntimeError:
         logger.debug("Event Manager cannot be initialized in a background task")
 
-
 class StateEvent(ABCMeta, EnumMeta):
     """
     Manages the keys for the observable dictionaries

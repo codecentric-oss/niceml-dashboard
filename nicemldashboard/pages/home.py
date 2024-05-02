@@ -11,16 +11,16 @@ Attributes:
 """
 
 
+from nicemldashboard.State.State import EventManager, ExperimentStateKeys, ExperimentEvents, init_event_manager
+
+
 from nicegui import ui
 from nicegui.observables import ObservableDict
-
-from nicemldashboard.State.State import EventManager, ExperimentStateKeys, ExperimentEvents, init_event_manager
 
 from nicemldashboard.basecomponents.sidebar import sidebar
 from nicemldashboard.basecomponents.table import experiment_runs_table
 from nicemldashboard.experiment.utils import get_random_experiments
 from nicemldashboard.experiment.experiment_manager import ExperimentManager
-from nicemldashboard.experiment.type import ExperimentType
 
 
 @ui.page("/")
@@ -28,6 +28,7 @@ def home():
     """
     Define the layout of the home page.
     """
+
     ui.add_scss("nicemldashboard/assets/style.scss")
     _instance = EventManager()
     init_event_manager(_instance)
@@ -37,7 +38,6 @@ def home():
     experiments = get_random_experiments(experiment_count=20)
     experiment_manager = ExperimentManager(experiments)
 
-    experiments = experiment_manager.filter_by(experiment_type=ExperimentType.OBJ_DET)
     sidebar()
     with ui.grid().classes("content"):
         with ui.card().style("width:100%"):

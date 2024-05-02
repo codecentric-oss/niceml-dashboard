@@ -22,7 +22,7 @@ class Dashboard:
     Main dashboard application for a NiceML Dashboard.
     """
 
-    def __init__(self, settings_path: str = "../.niceml/settings.yml"):
+    def __init__(self, settings_path: str = ".niceml/settings.yml"):
         """
         Initialize the Dashboard.
 
