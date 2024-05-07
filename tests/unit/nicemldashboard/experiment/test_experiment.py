@@ -27,10 +27,10 @@ def test_experiment_get_row():
         description="Description of the test experiment",
         experiment_id="123456",
         short_id="ABC",
-        git_version={"nicemldashboard": "v1.0"},
+        git_version={"nicemldashboard": "v1.0", "niceml": "v0.11.0"},
     )
     row = experiment.get_row()
-    assert row["git_version"] == {"nicemldashboard": "v1.0"}
+    assert row["git_version"] == "nicemldashboard:v1.0, niceml:v0.11.0"
     assert row["short_id"] == "ABC"
     assert row["experiment_id"] == "123456"
     assert row["description"] == "Description of the test experiment"

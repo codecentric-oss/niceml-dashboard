@@ -68,7 +68,12 @@ class Experiment:
         """
         row = {}
         for attribute in vars(self):
-            row[attribute] = getattr(self, attribute)
+            value = getattr(self, attribute)
+            if isinstance(value, dict):
+                value = ", ".join(
+                    [f"{name}:{version}" for name, version in value.items()]
+                )
+            row[attribute] = value
         return row
 
     @classmethod
