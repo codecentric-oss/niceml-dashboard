@@ -26,8 +26,7 @@ def home():
     """
     Define the layout of the home page.
     """
-    ui.add_style("nicemldashboard/assets/style.scss")
-    # Initialize the state_manager
+    ui.add_scss("nicemldashboard/assets/style.scss")
     _instance = EventManager()
     init_event_manager(_instance)
     exp_dict = _instance.get_dict(Dicts.experiment_dict)
