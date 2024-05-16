@@ -17,6 +17,9 @@ from nicemldashboard.State.State import EventManager, ExperimentStateKeys, Exper
 from nicegui import ui
 from nicegui.observables import ObservableDict
 
+
+from nicemldashboard.State.State import EventManager, ExperimentStateKeys, ExperimentEvents, init_event_manager
+
 from nicemldashboard.basecomponents.sidebar import sidebar
 from nicemldashboard.basecomponents.table import experiment_runs_table
 from nicemldashboard.experiment.utils import get_random_experiments
