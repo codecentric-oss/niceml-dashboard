@@ -12,6 +12,7 @@ from nicegui import ui, app
 from nicemldashboard.pages.home import home
 from nicemldashboard.utils.settings import Settings
 
+
 # TODO: Make file paths os-agnostic
 app.add_static_files("/fonts", "nicemldashboard/assets/fonts")
 
@@ -21,7 +22,7 @@ class Dashboard:
     Main dashboard application for a NiceML Dashboard.
     """
 
-    def __init__(self, settings_path: str = ".niceml/settings.yml"):
+    def __init__(self, settings_path: str = "../.niceml/settings.yml"):
         """
         Initialize the Dashboard.
 
