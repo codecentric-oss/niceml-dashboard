@@ -4,8 +4,8 @@ It includes the EventManager class for handling event dictionaries and observabl
 Also includes helper functions to initialize and get the instance of the Event Manager.
 Enums for Dicts are defined for consistency.
 """
-from abc import ABC, ABCMeta
-from enum import Enum, EnumMeta
+from abc import ABCMeta
+from enum import EnumMeta
 from nicegui import context
 import logging
 from nicegui.observables import ObservableDict
@@ -83,10 +83,7 @@ def init_event_manager(event_manager: EventManager):
     except RuntimeError:
         logger.debug("Event Manager cannot be initialized in a background task")
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 1539dec (refactor: generalize the state class)
 class StateEvent(ABCMeta, EnumMeta):
     """
     Manages the keys for the observable dictionaries
