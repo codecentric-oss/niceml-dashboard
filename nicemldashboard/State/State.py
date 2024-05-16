@@ -4,14 +4,21 @@ It includes the EventManager class for handling event dictionaries and observabl
 Also includes helper functions to initialize and get the instance of the Event Manager.
 Enums for Dicts are defined for consistency.
 """
-from enum import Enum
+from abc import ABC, ABCMeta
+from enum import Enum, EnumMeta
 from nicegui import context
 import logging
 from nicegui.observables import ObservableDict
 
 logger = logging.getLogger(__name__)
 
-_EVENT_MNGR_ATTR_NAME = "_niceml"
+_EVENT_MNGR_ATTR_NAME = "_nicemldashboard"
+
+
+class StateKeys(ABCMeta, EnumMeta):
+    """
+    Provides an abstract class for StateKey management
+    """
 
 
 class EventManager:
@@ -19,7 +26,7 @@ class EventManager:
     Manages event dictionaries and provides methods to retrieve and manage them.
     """
 
-    _observable_dicts: dict[str, ObservableDict]
+    _observable_dicts: dict[StateKeys, ObservableDict]
 
     def __init__(self):
         """
@@ -77,17 +84,23 @@ def init_event_manager(event_manager: EventManager):
         logger.debug("Event Manager cannot be initialized in a background task")
 
 
-class Events(Enum):
+class StateEvent(ABCMeta, EnumMeta):
     """
-    Manages the events in the observable dictionaries
+    Manages the keys for the observable dictionaries
     """
 
-    on_experiment_change = "on_experiment_change"
+
+class ExperimentEvents(StateEvent):
+    """
+    Manages the experimente events in the observable dictionaries
+    """
+
+    ON_EXPERIMENT_PREFIX_CHANGE = "on_experiment_prefix_change"
 
 
-class Dicts(Enum):
+class ExperimentStateKeys(StateKeys):
     """
     Manages the observable dictionaries
     """
 
-    experiment_dict = "experiment_dict"
+    EXPERIMENT_DICT = "experiment_dict"

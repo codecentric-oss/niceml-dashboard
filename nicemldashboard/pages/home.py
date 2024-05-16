@@ -14,7 +14,8 @@ Attributes:
 from nicegui import ui
 from nicegui.observables import ObservableDict
 
-from nicemldashboard.State.State import EventManager, Dicts, Events, init_event_manager
+from nicemldashboard.State.State import EventManager, ExperimentStateKeys, ExperimentEvents, init_event_manager
+
 from nicemldashboard.basecomponents.sidebar import sidebar
 from nicemldashboard.basecomponents.table import experiment_runs_table
 from nicemldashboard.experiment.utils import get_random_experiments
@@ -29,7 +30,7 @@ def home():
     ui.add_scss("nicemldashboard/assets/style.scss")
     _instance = EventManager()
     init_event_manager(_instance)
-    exp_dict = _instance.get_dict(Dicts.experiment_dict)
+    exp_dict = _instance.get_dict(ExperimentStateKeys.EXPERIMENT_DICT)
     exp_dict.on_change(_experiment_runs_table.refresh)
 
     experiments = get_random_experiments(experiment_count=20)
@@ -50,6 +51,6 @@ def _experiment_runs_table(
     experiment_manager: ExperimentManager, exp_dic: ObservableDict
 ):
     experiments = experiment_manager.filter_by(
-        experiment_type=exp_dic.get(Events.on_experiment_change)
+        experiment_type=exp_dic.get(ExperimentEvents.ON_EXPERIMENT_PREFIX_CHANGE)
     )
     experiment_runs_table(experiments=experiments)

@@ -16,7 +16,7 @@ from nicegui import ui
 from nicegui.observables import ObservableDict
 
 
-from nicemldashboard.State.State import _get_event_manager, Dicts, Events
+from nicemldashboard.State.State import _get_event_manager, ExperimentStateKeys, ExperimentEvents
 from nicemldashboard.basecomponents.buttons import SidebarToggleButton
 from nicemldashboard.experiment.type import ExperimentType
 
@@ -42,7 +42,8 @@ def sidebar(experiment_types: Optional[List[ExperimentType]] = None):
         for experiment_type in experiment_types:
             button_callback = lambda e, et=experiment_type: (
                 on_stage_change(
-                    _get_event_manager().get_dict(Dicts.experiment_dict), get_enum(et)
+                    _get_event_manager().get_dict(ExperimentStateKeys.EXPERIMENT_DICT),
+                    get_enum(experiment_type),
                 )
             )
 
@@ -63,7 +64,7 @@ def on_stage_change(observable_dict: ObservableDict, value: str):
     :param value:
     :return:
     """
-    observable_dict[Events.on_experiment_change] = value
+    observable_dict[ExperimentEvents.ON_EXPERIMENT_PREFIX_CHANGE] = value
 
 
 def get_enum(experiment_type: ExperimentType):
