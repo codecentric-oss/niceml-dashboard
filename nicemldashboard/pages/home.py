@@ -23,7 +23,6 @@ from nicemldashboard.experiment.experiment_manager import ExperimentManager
 from nicemldashboard.experiment.type import ExperimentType
 
 
-
 @ui.page("/")
 def home():
     """
