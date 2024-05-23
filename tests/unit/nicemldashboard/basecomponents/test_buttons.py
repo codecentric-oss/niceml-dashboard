@@ -2,7 +2,7 @@ import pytest
 from unittest.mock import MagicMock
 
 from nicemldashboard.basecomponents.buttons import (
-    SidebarToggleButton,
+    sidebartogglebutton,
     ARROW_RIGHT_ICON,
     ARROW_LEFT_ICON,
     MAX_WIDTH,
