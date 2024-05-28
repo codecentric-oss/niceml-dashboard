@@ -1,0 +1,81 @@
+name: 🧪 tests
+
+on:
+  pull_request:
+    types: [ opened, reopened, synchronize ]
+  workflow_call:
+permissions:
+  contents: write
+  checks: write
+  pull-requests: write
+jobs:
+  test:
+    strategy:
+      fail-fast: true
+      matrix:
+        python-version: [ "3.9", "3.10", "3.11"]
+        os: [ ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    name: 🧪 Run pytests
+    steps:
+      - name: ⬇️ Checkout repository
+        uses: actions/checkout@v4
+      - name: 🐍Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: 🔨 Setup poetry
+        uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: "1.7.1"
+      - name: 🧙 Install dependencies
+        run: |
+          poetry config virtualenvs.create false
+          poetry install --no-interaction --with dev --no-ansi
+      - run: mkdir results && touch results/test-results-${{ matrix.python-version }}-${{matrix.os}}-summary.md
+      - name: 🧪 Run tests
+        uses: aiakide/pytest-summary@main
+        with:
+          extensions: pytest-cov
+          options: --doctest-modules --cov-report term --cov-report xml:coverage-${{ matrix.python-version }}-${{matrix.os}}.xml --cov=nicemldashboard
+          paths: tests/**
+          output: test-results-${{ matrix.python-version }}-${{matrix.os}}-summary.md
+          show: "fail, skip"
+      - name: ⬆️ Upload pytest results
+        uses: actions/upload-artifact@v3
+        env:
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          name: pytest-results-${{ matrix.python-version }}-${{matrix.os}}
+          path: |
+            coverage-${{ matrix.python-version }}-${{matrix.os}}.xml
+            test-results-${{ matrix.python-version }}-${{matrix.os}}-summary.md
+            .test_report.xml
+        # Use always() to always run this step to publish test results when there are test failures
+        if: ${{ always() }}
+      - name: 🖊️ Write job summary
+        run: |
+          if [[ "${{matrix.os}}" == "windows-latest" ]]
+          then
+            echo "No summary available for Windows runners" >> $GITHUB_STEP_SUMMARY
+          else
+            cat test-results-${{ matrix.python-version }}-${{matrix.os}}-summary.md >> $GITHUB_STEP_SUMMARY
+          fi
+        shell: bash
+        if: ${{ always() }}
+      - name: ✏️ Write test result as comment
+        uses: MishaKav/pytest-coverage-comment@v1.1.51
+        with:
+          pytest-xml-coverage-path: coverage-${{ matrix.python-version }}-${{matrix.os}}.xml
+          title: Coverage Report
+          badge-title: Code Coverage
+          hide-badge: false
+          hide-report: false
+          create-new-comment: false
+          hide-comment: false
+          report-only-changed-files: true
+          remove-link-from-badge: false
+          junitxml-path: .test_report.xml
+          junitxml-title: Pytest summary
+          github-token: ${{ secrets.GITHUB_TOKEN }}
