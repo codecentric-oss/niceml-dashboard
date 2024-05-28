@@ -22,7 +22,7 @@ from nicemldashboard.state.appstate import (
 from nicemldashboard.basecomponents.sidebar import sidebar
 from nicemldashboard.basecomponents.table import experiment_runs_table
 from nicemldashboard.experiment.utils import get_random_experiments
-from nicemldashboard.experiment.experiment_manager import ExperimentManager
+from nicemldashboard.experiment.experimentmanager import ExperimentManager
 
 
 @ui.page("/")

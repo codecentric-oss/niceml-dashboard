@@ -12,7 +12,7 @@ Attributes:
 from nicegui import ui
 from nicegui.observables import ObservableDict
 from nicemldashboard.experiment.experiment import Experiment
-from nicemldashboard.experiment.experiment_manager import ExperimentManager
+from nicemldashboard.experiment.experimentmanager import ExperimentManager
 from nicemldashboard.state.appstate import ExperimentEvents
 
 

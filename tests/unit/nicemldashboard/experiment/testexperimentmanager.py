@@ -1,5 +1,5 @@
 import pytest
-from nicemldashboard.experiment.experiment_manager import ExperimentManager
+from nicemldashboard.experiment.experimentmanager import ExperimentManager
 from nicemldashboard.experiment.utils import get_random_experiments
 
 
