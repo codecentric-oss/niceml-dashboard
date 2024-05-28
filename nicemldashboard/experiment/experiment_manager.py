@@ -5,6 +5,7 @@ supports filtering experiments by their properties.
 import logging
 from typing import List
 
+from nicemldashboard.exceptions import ExperimentFilterError
 from nicemldashboard.experiment.experiment import Experiment
 
 
@@ -22,31 +23,26 @@ class ExperimentManager:
     def filter_by(self, **filters) -> List[Experiment]:
         """
         Filters the experiment list after filtering with the provided filters
-        :param filters:
-        :return:
+
+        Args:
+            **filters: A dictionary of filters to filter by
+
+        Returns:
+            List of filtered experiments
         """
-        filtered_experiments = self.experiments.copy()
-        for key, value in filters.items():
+        filtered_experiments = []
+        for experiment_attribute, field_value in filters.items():
             try:
-                if isinstance(value, dict):
-                    filtered_experiments = [
-                        exp
-                        for exp in filtered_experiments
-                        if all(
-                            item in getattr(exp, key, {}).items()
-                            for item in value.items()
-                        )
-                    ]
-                else:
-                    filtered_experiments = [
-                        exp
-                        for exp in filtered_experiments
-                        if getattr(exp, key, None) == value
-                    ]
-            except TypeError as e:
+                filtered_experiments = [
+                    exp
+                    for exp in self.experiments
+                    if getattr(exp, experiment_attribute, None) == field_value
+                ]
+            except ExperimentFilterError as e:
                 # Log the error message with details of which experiment and filter caused it.
                 logging.warning(
-                    f"Incomparable types between attribute '{key}' with value '{value}' "
-                    f"and filter value '{value}': {e}"
+                    f"Incomparable types between attribute '{experiment_attribute}' "
+                    f"with field_value '{field_value}' "
+                    f"and filter field_value '{field_value}': {e}"
                 )
         return filtered_experiments

@@ -6,6 +6,8 @@ Enums for Dicts are defined for consistency.
 """
 from abc import ABCMeta
 from enum import EnumMeta
+from typing import Dict
+
 from nicegui import context
 import logging
 from nicegui.observables import ObservableDict
@@ -26,13 +28,13 @@ class AppState:
     Manages event dictionaries and provides methods to retrieve and manage them.
     """
 
-    _state_dicts: dict[StateKeys, ObservableDict]
+    _state_data: Dict[StateKeys, ObservableDict]
 
     def __init__(self):
         """
         Initializes the EventManager with an empty dictionary of observable dictionaries.
         """
-        self._state_dicts = {}
+        self._state_data = {}
 
     def get_dict(self, dict_name: str) -> ObservableDict:
         """
@@ -44,11 +46,11 @@ class AppState:
         Returns:
             ObservableDict: The retrieved or newly created observable dictionary.
         """
-        if dict_name in self._state_dicts:
-            return self._state_dicts[dict_name]
+        if dict_name in self._state_data:
+            return self._state_data[dict_name]
         else:
             new_dict = ObservableDict()
-            self._state_dicts[dict_name] = new_dict
+            self._state_data[dict_name] = new_dict
             return new_dict
 
 
@@ -81,7 +83,7 @@ def init_event_manager(event_manager: AppState):
         if getattr(client, _EVENT_MNGR_ATTR_NAME, None) is None:
             setattr(client, _EVENT_MNGR_ATTR_NAME, event_manager)
     except RuntimeError:
-        logger.debug("Event Manager cannot be initialized in a background task")
+        logger.warning("Event Manager cannot be initialized in a background task")
 
 
 class StateEvent(ABCMeta, EnumMeta):

@@ -13,14 +13,8 @@ Attributes:
 from typing import Optional, List
 
 from nicegui import ui
-from nicegui.observables import ObservableDict
 
-
-from nicemldashboard.State.appstate import (
-    get_event_manager,
-    ExperimentStateKeys,
-    ExperimentEvents,
-)
+from nicemldashboard.basecomponents.buttons.sidebarbutton import SidebarButton
 from nicemldashboard.basecomponents.buttons.sidebartogglebutton import (
     SidebarToggleButton,
 )
@@ -36,54 +30,19 @@ def sidebar(experiment_types: Optional[List[ExperimentType]] = None):
                             Defaults to None, in which case buttons for all available
                             experiment types will be displayed.
     """
-    experiment_types = experiment_types or [
-        exp_type.value for exp_type in ExperimentType.__members__.values()
-    ]
-
     with ui.left_drawer(top_corner=False, bottom_corner=True, fixed=True).classes(
         "sidebar"
     ).props("width=70") as left_drawer:
         side_bar_toggle = SidebarToggleButton(left_drawer=left_drawer)
 
-        for experiment_type in experiment_types:
-            button_callback = lambda e, et=experiment_type: (
-                on_stage_change(
-                    get_event_manager().get_dict(ExperimentStateKeys.EXPERIMENT_DICT),
-                    get_enum(et),
-                )
-            )
-
-            with ui.button(
-                color="transparent", icon=experiment_type.icon, on_click=button_callback
+        for experiment_type in ExperimentType.__members__.values():
+            with SidebarButton(
+                color="transparent",
+                icon=experiment_type.value.icon,
+                experiment_type=experiment_type,
             ).props("flat").classes("exp-type-btn").bind_text_from(
-                experiment_type,
+                experiment_type.value,
                 "prefix",
                 backward=lambda x: ("" if not side_bar_toggle.is_expanded() else x),
             ):
-                ui.tooltip(experiment_type.name)
-
-
-def on_stage_change(observable_dict: ObservableDict, value: str):
-    """
-    Updates the Events.on_experiment_change key with the value given.
-    :param observable_dict:
-    :param value:
-    :return:
-    """
-    observable_dict[ExperimentEvents.ON_EXPERIMENT_PREFIX_CHANGE] = value
-
-
-def get_enum(experiment_type: ExperimentType):
-    """
-    Provides a way to easily compare the experiment type with the ExperimentType Enums
-    :param experiment_type:
-    :return:
-    """
-    if experiment_type.prefix == "SEG":
-        return ExperimentType.SEM_SEG
-    elif experiment_type.prefix == "CLS":
-        return ExperimentType.CLS
-    elif experiment_type.prefix == "OBD":
-        return ExperimentType.OBJ_DET
-    else:
-        raise Exception("The event type is not available in the ExperimentType Enum")
+                ui.tooltip(experiment_type.value.name)

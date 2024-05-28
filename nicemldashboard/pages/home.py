@@ -11,13 +11,11 @@ Attributes:
 """
 
 from nicegui import ui
-from nicegui.observables import ObservableDict
 
 
-from nicemldashboard.State.appstate import (
+from nicemldashboard.state.appstate import (
     AppState,
     ExperimentStateKeys,
-    ExperimentEvents,
     init_event_manager,
 )
 
@@ -36,8 +34,8 @@ def home():
     ui.add_scss("nicemldashboard/assets/style.scss")
     _instance = AppState()
     init_event_manager(_instance)
-    exp_dict = _instance.get_dict(ExperimentStateKeys.EXPERIMENT_DICT)
-    exp_dict.on_change(_experiment_runs_table.refresh)
+    exp_data = _instance.get_dict(ExperimentStateKeys.EXPERIMENT_DICT)
+    exp_data.on_change(experiment_runs_table.refresh)
 
     experiments = get_random_experiments(experiment_count=20)
     experiment_manager = ExperimentManager(experiments)
@@ -49,14 +47,4 @@ def home():
                 with ui.row():
                     ui.input(label="Experiment run", placeholder="Search for run")
                 ui.separator()
-                _experiment_runs_table(experiment_manager, exp_dict)
-
-
-@ui.refreshable
-def _experiment_runs_table(
-    experiment_manager: ExperimentManager, exp_dic: ObservableDict
-):
-    experiments = experiment_manager.filter_by(
-        experiment_type=exp_dic.get(ExperimentEvents.ON_EXPERIMENT_PREFIX_CHANGE)
-    )
-    experiment_runs_table(experiments=experiments)
+                experiment_runs_table(experiment_manager, exp_data)

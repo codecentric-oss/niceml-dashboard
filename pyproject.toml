@@ -27,7 +27,6 @@ pytest = "^8.1.1"
 select = ["E","F","D100", "D101","D102", "D103","D105","D106","D107","PT","PL"]
 fixable = ["E","F","D","PT","PL"]
 exclude = ["./tests/**"]
-ignore = ["E731"]
 line-length = 100
 
 
