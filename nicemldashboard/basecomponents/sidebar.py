@@ -21,7 +21,9 @@ from nicemldashboard.State.State import (
     ExperimentStateKeys,
     ExperimentEvents,
 )
-from nicemldashboard.basecomponents.buttons import SidebarToggleButton
+from nicemldashboard.basecomponents.buttons.sidebartogglebutton import (
+    SidebarToggleButton,
+)
 from nicemldashboard.experiment.type import ExperimentType
 
 

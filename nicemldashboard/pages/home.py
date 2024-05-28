@@ -11,14 +11,16 @@ Attributes:
 """
 
 
-from nicemldashboard.State.State import EventManager, ExperimentStateKeys, ExperimentEvents, init_event_manager
-
-
 from nicegui import ui
 from nicegui.observables import ObservableDict
 
 
-from nicemldashboard.State.State import EventManager, ExperimentStateKeys, ExperimentEvents, init_event_manager
+from nicemldashboard.State.State import (
+    EventManager,
+    ExperimentStateKeys,
+    ExperimentEvents,
+    init_event_manager,
+)
 
 from nicemldashboard.basecomponents.sidebar import sidebar
 from nicemldashboard.basecomponents.table import experiment_runs_table
@@ -34,6 +36,7 @@ def home():
 
     ui.add_scss("nicemldashboard/assets/style.scss")
     _instance = EventManager()
+
     init_event_manager(_instance)
     exp_dict = _instance.get_dict(ExperimentStateKeys.EXPERIMENT_DICT)
     exp_dict.on_change(_experiment_runs_table.refresh)
