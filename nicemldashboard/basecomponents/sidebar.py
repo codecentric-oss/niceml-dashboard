@@ -12,7 +12,7 @@ Attributes:
 
 from typing import Optional, List
 
-from nicegui import ui, app
+from nicegui import ui
 from nicegui.observables import ObservableDict
 
 
@@ -71,7 +71,6 @@ def on_stage_change(observable_dict: ObservableDict, value: str):
     :return:
     """
     observable_dict[ExperimentEvents.ON_EXPERIMENT_PREFIX_CHANGE] = value
-    app.storage.tab[ExperimentEvents.ON_EXPERIMENT_PREFIX_CHANGE] = value
 
 
 def get_enum(experiment_type: ExperimentType):
