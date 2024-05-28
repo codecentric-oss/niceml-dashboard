@@ -21,18 +21,18 @@ class StateKeys(ABCMeta, EnumMeta):
     """
 
 
-class EventManager:
+class AppState:
     """
     Manages event dictionaries and provides methods to retrieve and manage them.
     """
 
-    _observable_dicts: dict[StateKeys, ObservableDict]
+    _state_dicts: dict[StateKeys, ObservableDict]
 
     def __init__(self):
         """
         Initializes the EventManager with an empty dictionary of observable dictionaries.
         """
-        self._observable_dicts = {}
+        self._state_dicts = {}
 
     def get_dict(self, dict_name: str) -> ObservableDict:
         """
@@ -44,20 +44,20 @@ class EventManager:
         Returns:
             ObservableDict: The retrieved or newly created observable dictionary.
         """
-        if dict_name in self._observable_dicts:
-            return self._observable_dicts[dict_name]
+        if dict_name in self._state_dicts:
+            return self._state_dicts[dict_name]
         else:
             new_dict = ObservableDict()
-            self._observable_dicts[dict_name] = new_dict
+            self._state_dicts[dict_name] = new_dict
             return new_dict
 
 
-def _get_event_manager() -> EventManager:
+def get_event_manager() -> AppState:
     """
     Retrieves the EventManager instance from the current client context.
 
     Returns:
-        EventManager: The EventManager instance.
+        AppState: The EventManager instance.
 
     Raises:
         RuntimeError: If Event Manager is not initialized.
@@ -68,13 +68,13 @@ def _get_event_manager() -> EventManager:
     return getattr(client, _EVENT_MNGR_ATTR_NAME)
 
 
-def init_event_manager(event_manager: EventManager):
+def init_event_manager(event_manager: AppState):
     """
     Initializes the EventManager for the current client context.
     If already initialized, gives back a console output.
 
     Args:
-        event_manager (EventManager): The EventManager instance to initialize.
+        event_manager (AppState): The EventManager instance to initialize.
     """
     try:
         client = context.get_client()

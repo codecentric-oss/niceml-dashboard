@@ -10,13 +10,12 @@ Attributes:
 
 """
 
-
 from nicegui import ui
 from nicegui.observables import ObservableDict
 
 
-from nicemldashboard.State.State import (
-    EventManager,
+from nicemldashboard.State.appstate import (
+    AppState,
     ExperimentStateKeys,
     ExperimentEvents,
     init_event_manager,
@@ -35,8 +34,7 @@ def home():
     """
 
     ui.add_scss("nicemldashboard/assets/style.scss")
-    _instance = EventManager()
-
+    _instance = AppState()
     init_event_manager(_instance)
     exp_dict = _instance.get_dict(ExperimentStateKeys.EXPERIMENT_DICT)
     exp_dict.on_change(_experiment_runs_table.refresh)

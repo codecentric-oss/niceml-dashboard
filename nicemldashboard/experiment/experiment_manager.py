@@ -45,7 +45,7 @@ class ExperimentManager:
                     ]
             except TypeError as e:
                 # Log the error message with details of which experiment and filter caused it.
-                logging.error(
+                logging.warning(
                     f"Incomparable types between attribute '{key}' with value '{value}' "
                     f"and filter value '{value}': {e}"
                 )
