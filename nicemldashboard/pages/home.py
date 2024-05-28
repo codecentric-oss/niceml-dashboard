@@ -12,9 +12,17 @@ Attributes:
 
 from nicegui import ui
 
+
+from nicemldashboard.state.appstate import (
+    AppState,
+    ExperimentStateKeys,
+    init_event_manager,
+)
+
 from nicemldashboard.basecomponents.sidebar import sidebar
 from nicemldashboard.basecomponents.table import experiment_runs_table
 from nicemldashboard.experiment.utils import get_random_experiments
+from nicemldashboard.experiment.experimentmanager import ExperimentManager
 
 
 @ui.page("/")
@@ -22,9 +30,15 @@ def home():
     """
     Define the layout of the home page.
     """
+
     ui.add_scss("nicemldashboard/assets/style.scss")
+    _instance = AppState()
+    init_event_manager(_instance)
+    exp_data = _instance.get_dict(ExperimentStateKeys.EXPERIMENT_DICT)
+    exp_data.on_change(experiment_runs_table.refresh)
 
     experiments = get_random_experiments(experiment_count=20)
+    experiment_manager = ExperimentManager(experiments)
 
     sidebar()
     with ui.grid().classes("content"):
@@ -33,4 +47,4 @@ def home():
                 with ui.row():
                     ui.input(label="Experiment run", placeholder="Search for run")
                 ui.separator()
-                experiment_runs_table(experiments=experiments)
+                experiment_runs_table(experiment_manager, exp_data)
