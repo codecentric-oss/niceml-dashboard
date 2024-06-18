@@ -12,6 +12,7 @@ Attributes:
 """
 
 from typing import Dict, get_type_hints
+from niceml.config.envconfig import EXP_NAME_KEY,SHORT_ID_KEY,DESCRIPTION_KEY,RUN_ID_KEY,EXP_TYPE_KEY
 
 from nicemldashboard.experiment.type import ExperimentType
 
@@ -38,6 +39,7 @@ class Experiment:
         experiment_id: str,
         short_id: str,
         git_version: Dict[str, str],
+        data_set: str,
     ):
         """
         Initializes an `Experiment`
@@ -57,6 +59,7 @@ class Experiment:
         self.description = description
         self.name = name
         self.experiment_type = experiment_type
+        self.data_set = data_set
 
     def get_row(self):
         """
@@ -98,8 +101,16 @@ class Experiment:
             )
 
         return columns
+    
+    def to_dict(self) -> dict:
+        return {EXP_NAME_KEY:self.name,SHORT_ID_KEY:self.short_id,DESCRIPTION_KEY:self.description,RUN_ID_KEY:self.experiment_id, EXP_TYPE_KEY:self.experiment_type.value.prefix,"data_set":self.data_set} # DataSet Key missing
 
-
+    def __lt__(self,other:"Experiment") -> bool: 
+        return self.experiment_id < other.experiment_id
+        
+    def __eq__(self,other:"Experiment") -> bool:
+        return self.experiment_id == other.experiment_id
+    
 def format_string(input_string: str):
     """
     Format the input string by replacing underscores with whitespaces and capitalizing

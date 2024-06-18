@@ -8,7 +8,7 @@ Attributes:
     * `ExperimentType`: An enumeration representing different types of experiments.
 
 """
-
+from nicemldashboard.utils.exceptions import ExperimentTypeNotFoundError
 from dataclasses import dataclass
 from enum import Enum
 
@@ -46,3 +46,12 @@ class ExperimentType(Enum):
     CLS = _ExperimentType(
         name="Image Classification", prefix="CLS", icon="o_image_search"
     )
+
+    @classmethod
+    def from_prefix(cls,prefix:str) -> "ExperimentType":
+        for experimet_type in cls :
+            if experimet_type.value.prefix == prefix:
+                
+            
+                return experimet_type
+        raise ExperimentTypeNotFoundError()
