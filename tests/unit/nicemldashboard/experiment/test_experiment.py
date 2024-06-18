@@ -13,6 +13,7 @@ def test_experiment_instance():
         experiment_id="123456",
         short_id="ABC",
         git_version={"nicemldashboard": "v1.0"},
+        data_set= "test datasets"
     )
     assert isinstance(experiment, Experiment)
 
@@ -28,6 +29,7 @@ def test_experiment_get_row():
         experiment_id="123456",
         short_id="ABC",
         git_version={"nicemldashboard": "v1.0", "niceml": "v0.11.0"},
+        data_set= "test datasets"
     )
     row = experiment.get_row()
     assert row["git_version"] == "nicemldashboard:v1.0, niceml:v0.11.0"
@@ -36,6 +38,7 @@ def test_experiment_get_row():
     assert row["description"] == "Description of the test experiment"
     assert row["name"] == "Test Experiment"
     assert row["experiment_type"] == ExperimentType.SEM_SEG
+    assert row["data_set"] == "test datasets"
 
 
 def test_experiment_get_columns():
@@ -79,6 +82,14 @@ def test_experiment_get_columns():
             "align": "left",
             "sortable": True,
         },
+        {
+            "name": "data_set",
+            "label": "Data set",
+            "field": "data_set",
+            "align": "left",
+            "sortable": True,
+        },
+        
     ]
     assert columns == expected_columns
 

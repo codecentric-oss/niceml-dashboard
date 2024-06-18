@@ -14,7 +14,7 @@ from nicegui import ui
 
 from nicemldashboard.basecomponents.sidebar import sidebar
 from nicemldashboard.basecomponents.table import experiment_runs_table
-from nicemldashboard.experiment.utils import get_random_experiments
+from nicemldashboard.experiment.get_random_experiments import get_random_experiments
 
 
 @ui.page("/")
