@@ -5,6 +5,7 @@ from tempfile import TemporaryDirectory
 from typing import List, Optional
 
 import numpy as np
+import pandas as pd
 import pytest
 from PIL import Image
 from niceml.experiments.expfilenames import ExperimentFilenames
@@ -14,7 +15,7 @@ from niceml.utilities.fsspec.locationutils import (
     open_location,
     join_fs_path,
 )
-from niceml.utilities.ioutils import write_yaml, write_json, write_image
+from niceml.utilities.ioutils import write_yaml, write_json, write_image, write_parquet
 from niceml.utilities.timeutils import generate_timestamp
 
 from nicemldashboard.experiment.experiment import Experiment
@@ -119,7 +120,7 @@ def experiment_loader(
 
 
 @pytest.fixture
-def test_cached_image_filename(cache_location: LocationConfig) -> str:
+def cached_image_filename(cache_location: LocationConfig) -> str:
     test_cached_image_array = np.ones(shape=(256, 256, 3), dtype=np.uint8)
     cached_image = Image.fromarray(test_cached_image_array)
     filename = "test_cached_image.png"
@@ -132,7 +133,24 @@ def test_cached_image_filename(cache_location: LocationConfig) -> str:
 
 
 @pytest.fixture
-def test_image_filename(experiment_location: LocationConfig) -> str:
+def cached_data_frame_filename(cache_location: LocationConfig) -> str:
+    data_frame = pd.DataFrame(
+        [
+            {"test_column_a": 1, "test_colum_b": "test_cache"},
+            {"test_column_a": 2, "test_colum_b": "test_cache"},
+        ]
+    )
+    filename = "test_cached_data_frame.parq"
+    with open_location(cache_location) as (cache_file_system, cache_root):
+        filepath = join_fs_path(cache_file_system, cache_root, "data_frames", filename)
+        write_parquet(
+            dataframe=data_frame, filepath=filepath, file_system=cache_file_system
+        )
+    return filename
+
+
+@pytest.fixture
+def image_filename(experiment_location: LocationConfig) -> str:
     test_image_array = np.zeros(shape=(256, 256, 3), dtype=np.uint8)
     image = Image.fromarray(test_image_array)
     filename = "test_image.png"
@@ -144,6 +162,23 @@ def test_image_filename(experiment_location: LocationConfig) -> str:
             experiment_file_system, experiment_root, "images", filename
         )
         write_image(image=image, filepath=filepath, file_system=experiment_file_system)
+    return filename
+
+
+@pytest.fixture
+def data_frame_filename(cache_location: LocationConfig) -> str:
+    data_frame = pd.DataFrame(
+        [
+            {"test_column_a": 1, "test_colum_b": "test"},
+            {"test_column_a": 2, "test_colum_b": "test"},
+        ]
+    )
+    filename = "test_data_frame.parq"
+    with open_location(cache_location) as (cache_file_system, cache_root):
+        filepath = join_fs_path(cache_file_system, cache_root, "data_frames", filename)
+        write_parquet(
+            dataframe=data_frame, filepath=filepath, file_system=cache_file_system
+        )
     return filename
 
 

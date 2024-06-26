@@ -8,11 +8,11 @@ from nicemldashboard.loader.imageloader import CacheImageLoader
 
 def test_load_image_from_cache(
     image_loader: CacheImageLoader,
-    test_cached_image_filename: str,
+    cached_image_filename: str,
     experiment_location: LocationConfig,
 ):
     loaded_image = image_loader.load_image(
-        file_name=test_cached_image_filename,
+        file_name=cached_image_filename,
         image_location=join_location_w_path(experiment_location, "images"),
     )
     assert (np.asarray(loaded_image) == 1).all()
@@ -21,11 +21,11 @@ def test_load_image_from_cache(
 
 def test_load_image(
     image_loader: CacheImageLoader,
-    test_image_filename: str,
+    image_filename: str,
     experiment_location: LocationConfig,
 ):
     loaded_image = image_loader.load_image(
-        file_name=test_image_filename,
+        file_name=image_filename,
         image_location=join_location_w_path(experiment_location, "images"),
     )
     assert (np.asarray(loaded_image) == 0).all()
@@ -43,11 +43,11 @@ def test_load_image(
 def test_load_image_resize(
     target_size: ImageSize,
     image_loader: CacheImageLoader,
-    test_image_filename: str,
+    image_filename: str,
     experiment_location: LocationConfig,
 ):
     loaded_image = image_loader.load_image(
-        file_name=test_image_filename,
+        file_name=image_filename,
         image_location=join_location_w_path(experiment_location, "images"),
         target_size=target_size,
     )
