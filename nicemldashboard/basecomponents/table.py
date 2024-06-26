@@ -9,18 +9,28 @@ Attributes:
 
 """
 
-from typing import List
 from nicegui import ui
+from nicegui.observables import ObservableDict
 from nicemldashboard.experiment.experiment import Experiment
+from nicemldashboard.experiment.experimentmanager import ExperimentManager
+from nicemldashboard.state.appstate import ExperimentEvents
 
 
-def experiment_runs_table(experiments: List[Experiment]):
+@ui.refreshable
+def experiment_runs_table(
+    experiment_manager: ExperimentManager, exp_dic: ObservableDict
+):
     """
     Create a table for displaying experiment runs.
 
     Args:
         experiments: List of experiment runs to display in the table.
     """
+
+    experiments = experiment_manager.filter_by(
+        experiment_type=exp_dic.get(ExperimentEvents.ON_EXPERIMENT_PREFIX_CHANGE)
+    )
+
     ui.table(
         columns=Experiment.get_columns(),
         rows=[run.get_row() for run in experiments],

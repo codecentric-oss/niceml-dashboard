@@ -4,28 +4,37 @@ It includes the EventManager class for handling event dictionaries and observabl
 Also includes helper functions to initialize and get the instance of the Event Manager.
 Enums for Dicts are defined for consistency.
 """
-from enum import Enum
+from abc import ABCMeta
+from enum import EnumMeta
+from typing import Dict
+
 from nicegui import context
 import logging
 from nicegui.observables import ObservableDict
 
 logger = logging.getLogger(__name__)
 
-_EVENT_MNGR_ATTR_NAME = "_niceml"
+_EVENT_MNGR_ATTR_NAME = "_nicemldashboard"
 
 
-class EventManager:
+class StateKeys(ABCMeta, EnumMeta):
+    """
+    Provides an abstract class for StateKey management
+    """
+
+
+class AppState:
     """
     Manages event dictionaries and provides methods to retrieve and manage them.
     """
 
-    _observable_dicts: dict[str, ObservableDict]
+    _state_data: Dict[StateKeys, ObservableDict]
 
     def __init__(self):
         """
         Initializes the EventManager with an empty dictionary of observable dictionaries.
         """
-        self._observable_dicts = {}
+        self._state_data = {}
 
     def get_dict(self, dict_name: str) -> ObservableDict:
         """
@@ -37,20 +46,20 @@ class EventManager:
         Returns:
             ObservableDict: The retrieved or newly created observable dictionary.
         """
-        if dict_name in self._observable_dicts:
-            return self._observable_dicts[dict_name]
+        if dict_name in self._state_data:
+            return self._state_data[dict_name]
         else:
             new_dict = ObservableDict()
-            self._observable_dicts[dict_name] = new_dict
+            self._state_data[dict_name] = new_dict
             return new_dict
 
 
-def _get_event_manager() -> EventManager:
+def get_event_manager() -> AppState:
     """
     Retrieves the EventManager instance from the current client context.
 
     Returns:
-        EventManager: The EventManager instance.
+        AppState: The EventManager instance.
 
     Raises:
         RuntimeError: If Event Manager is not initialized.
@@ -61,25 +70,39 @@ def _get_event_manager() -> EventManager:
     return getattr(client, _EVENT_MNGR_ATTR_NAME)
 
 
-def init_event_manager(event_manager: EventManager):
+def init_event_manager(event_manager: AppState):
     """
     Initializes the EventManager for the current client context.
     If already initialized, gives back a console output.
 
     Args:
-        event_manager (EventManager): The EventManager instance to initialize.
+        event_manager (AppState): The EventManager instance to initialize.
     """
     try:
         client = context.get_client()
         if getattr(client, _EVENT_MNGR_ATTR_NAME, None) is None:
             setattr(client, _EVENT_MNGR_ATTR_NAME, event_manager)
     except RuntimeError:
-        logger.debug("Event Manager cannot be initialized in a background task")
+        logger.warning("Event Manager cannot be initialized in a background task")
 
 
-class Dicts(Enum):
+class StateEvent(ABCMeta, EnumMeta):
+    """
+    Manages the keys for the observable dictionaries
+    """
+
+
+class ExperimentEvents(StateEvent):
+    """
+    Manages the experimente events in the observable dictionaries
+    """
+
+    ON_EXPERIMENT_PREFIX_CHANGE = "on_experiment_prefix_change"
+
+
+class ExperimentStateKeys(StateKeys):
     """
     Manages the observable dictionaries
     """
 
-    experiment_dict = "experiment_dict"
+    EXPERIMENT_DICT = "experiment_dict"
