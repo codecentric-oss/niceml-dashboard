@@ -32,7 +32,7 @@ def test_sidebar_toggle_button_initialization(mock_left_drawer):
 
 @pytest.mark.parametrize(
     "initial_state, expected_width, expected_icon",
-    [(False, MAX_WIDTH, ARROW_RIGHT_ICON), (True, MIN_WIDTH, ARROW_LEFT_ICON)],
+    [(False, MAX_WIDTH, ARROW_LEFT_ICON), (True, MIN_WIDTH, ARROW_RIGHT_ICON)],
 )
 def test_toggle_method(
     mock_left_drawer: MagicMock,

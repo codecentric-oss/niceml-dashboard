@@ -9,6 +9,7 @@ Attributes:
 
 """
 
+from nicemldashboard.utils.exceptions import ExperimentTypeNotFoundError
 from dataclasses import dataclass
 from enum import Enum
 
@@ -46,3 +47,22 @@ class ExperimentType(Enum):
     CLS = _ExperimentType(
         name="Image Classification", prefix="CLS", icon="o_image_search"
     )
+
+    @classmethod
+    def from_prefix(cls, prefix: str) -> "ExperimentType":
+        """
+        Get the `ExperimentType` based on a given `prefix`
+        Args:
+            prefix: The prefix of an `ExperimentType`
+
+        Returns:
+            The `ExperimentType` of the `prefix`
+
+        Raises:
+            ExperimentTypeNotFoundError: If there is no `ExperimentType` for the given prefix
+
+        """
+        for experiment_type in cls:
+            if experiment_type.value.prefix == prefix:
+                return experiment_type
+        raise ExperimentTypeNotFoundError()

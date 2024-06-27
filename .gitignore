@@ -6,3 +6,5 @@ poetry.toml
 **/__pycache__/
 
 .DS_Store
+
+experiments/
