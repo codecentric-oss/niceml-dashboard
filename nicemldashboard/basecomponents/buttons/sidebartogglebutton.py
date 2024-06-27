@@ -84,7 +84,7 @@ class SidebarToggleButton(ui.button):
         """
         Update the button's icon based on the current state of the sidebar.
         """
-        self.props(f"icon={ARROW_RIGHT_ICON if self._state else ARROW_LEFT_ICON}")
+        self.props(f"icon={ARROW_LEFT_ICON if self._state else ARROW_RIGHT_ICON}")
         super().update()
 
     def get_props(self) -> dict:

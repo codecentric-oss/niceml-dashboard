@@ -60,7 +60,10 @@ def get_random_experiments(
             experiment_type=experiment_type,
             name=f"Experiment_{index}",
             description=f"Random generated experiment ('{index}')",
-            experiment_id=f"{uuid.uuid4()}-{short_id}",
+            experiment_id=(
+                f"{experiment_type.value.prefix}"
+                f"-{generate_timestamp()}-id_{short_id}"
+            ),
             short_id=short_id,
             git_version={
                 "version": "".join(

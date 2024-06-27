@@ -13,7 +13,7 @@ def test_experiment_instance():
         experiment_id="123456",
         short_id="ABC",
         git_version={"nicemldashboard": "v1.0"},
-        data_set= "test datasets"
+        data_set="test datasets",
     )
     assert isinstance(experiment, Experiment)
 
@@ -29,7 +29,7 @@ def test_experiment_get_row():
         experiment_id="123456",
         short_id="ABC",
         git_version={"nicemldashboard": "v1.0", "niceml": "v0.11.0"},
-        data_set= "test datasets"
+        data_set="test datasets",
     )
     row = experiment.get_row()
     assert row["git_version"] == "nicemldashboard:v1.0, niceml:v0.11.0"
@@ -89,7 +89,6 @@ def test_experiment_get_columns():
             "align": "left",
             "sortable": True,
         },
-        
     ]
     assert columns == expected_columns
 

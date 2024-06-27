@@ -4,6 +4,7 @@ It includes the EventManager class for handling event dictionaries and observabl
 Also includes helper functions to initialize and get the instance of the Event Manager.
 Enums for Dicts are defined for consistency.
 """
+
 from abc import ABCMeta
 from enum import EnumMeta
 from typing import Dict
@@ -36,21 +37,22 @@ class AppState:
         """
         self._state_data = {}
 
-    def get_dict(self, dict_name: str) -> ObservableDict:
+    def get_dict(self, state_key: StateKeys) -> ObservableDict:
         """
         Retrieves an observable dictionary by name, creating a new one if it doesn't exist.
 
         Args:
-            dict_name (str): The name of the dictionary to retrieve.
+            state_key: The name of the dictionary to retrieve.
 
         Returns:
-            ObservableDict: The retrieved or newly created observable dictionary.
+            The retrieved or newly created observable dictionary.
         """
-        if dict_name in self._state_data:
-            return self._state_data[dict_name]
+
+        if state_key in self._state_data:
+            return self._state_data[state_key]
         else:
             new_dict = ObservableDict()
-            self._state_data[dict_name] = new_dict
+            self._state_data[state_key] = new_dict
             return new_dict
 
 
@@ -64,7 +66,7 @@ def get_event_manager() -> AppState:
     Raises:
         RuntimeError: If Event Manager is not initialized.
     """
-    client = context.get_client()
+    client = context.client
     if not hasattr(client, _EVENT_MNGR_ATTR_NAME):
         raise RuntimeError("Event Manager needs to be initialized with init_store")
     return getattr(client, _EVENT_MNGR_ATTR_NAME)
@@ -79,7 +81,7 @@ def init_event_manager(event_manager: AppState):
         event_manager (AppState): The EventManager instance to initialize.
     """
     try:
-        client = context.get_client()
+        client = context.client
         if getattr(client, _EVENT_MNGR_ATTR_NAME, None) is None:
             setattr(client, _EVENT_MNGR_ATTR_NAME, event_manager)
     except RuntimeError:
