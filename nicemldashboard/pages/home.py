@@ -12,7 +12,7 @@ Attributes:
 
 from nicegui import ui
 
-
+from nicemldashboard.experimentdetails import mainframe
 from nicemldashboard.state.appstate import (
     AppState,
     ExperimentStateKeys,
@@ -47,4 +47,6 @@ def home():
                 with ui.row():
                     ui.input(label="Experiment run", placeholder="Search for run")
                 ui.separator()
-                experiment_runs_table(experiment_manager, exp_data)
+                experiment_runs_table(
+                    experiment_manager, exp_data, mainframe.ExperimentDetailsFrame()
+                )
