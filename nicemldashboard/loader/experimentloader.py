@@ -33,7 +33,7 @@ from niceml.config.envconfig import (
     SHORT_ID_KEY,
     DESCRIPTION_KEY,
     RUN_ID_KEY,
-    EXP_PREFIX_KEY,
+    EXP_TYPE_KEY,
 )
 from PIL import Image
 import pandas as pd
@@ -174,7 +174,7 @@ class FilesAndFolderLoader(ExperimentLoader):
                     experiment = Experiment(
                         name=experiment_info[EXP_NAME_KEY],
                         experiment_type=ExperimentType.from_prefix(
-                            prefix=experiment_info[EXP_PREFIX_KEY]
+                            prefix=experiment_info[EXP_TYPE_KEY]
                         ),
                         short_id=experiment_info[SHORT_ID_KEY],
                         description=experiment_info[DESCRIPTION_KEY],
